@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import Covid from './components/Covid'
+import "./App.css"
+import CovidState from './components/CovidState'
 
-function App() {
+const App = () => {
+
+  const [data, setData] = useState([])
+
+  const covidData = async() => {
+    try {
+      const res = await fetch('https://api.covid19india.org/data.json');
+      const data = await res.json();
+      // console.log(data.statewise);
+      setData(data.statewise[0])
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  useEffect(() => {
+    covidData();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Covid info = {data}/>
+      <CovidState/>
+    </>
+  )
 }
 
-export default App;
+
+export default App
